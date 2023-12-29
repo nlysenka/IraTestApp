@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Newtonsoft.Json;
+using pr;
 
 class Program
 {
@@ -7,65 +8,53 @@ class Program
 
     static void Main()
     {
-        Console.WriteLine("Įveskite duomenis norint sugeneruoti asmens kodą:");
+        var inputPath = Path.Combine("D:", "data.json");
+        var resultPath = Path.Combine("D:", "result.json");
 
-        char gender;
-        int genderDigit = 0;
-        int currentYear;
-
-        do
+        var records = ReadFile(inputPath);
+        
+        if (records == null)
         {
-            Console.Write("Lytis (V/M): ");
-            gender = char.ToUpper(Console.ReadKey().KeyChar);
-            Console.WriteLine(); 
-
-            Console.Write("Metai, kai gimėte (keturi skaičiai): ");
-            if (!int.TryParse(Console.ReadLine(), out currentYear) || currentYear < MinBirthYear || currentYear > MaxBirthYear)
-            {
-                Console.WriteLine($"Neteisingi metai. Pakartokite įvedimą (nuo {MinBirthYear} iki {MaxBirthYear}).");
-            }
-
-            if (currentYear >= 1800 && currentYear <= 1900)
-            {
-                genderDigit = (gender == 'V') ? 1 : 2;
-            }
-            else if (currentYear >= 1901 && currentYear <= 2000)
-            {
-                genderDigit = (gender == 'V') ? 3 : 4;
-            }
-            else if (currentYear >= 2001 && currentYear <= 2023)
-            {
-                genderDigit = (gender == 'V') ? 5 : 6;
-            }
-
-            if (genderDigit == 0)
-            {
-                Console.WriteLine("Neteisingas įvedimas. Pakartokite įvedimą.");
-            }
-
-        } while (genderDigit == 0);
-
-        int birthYear = currentYear;
-
-        Console.Write("Gimimo mėnuo (1-12): ");
-        int birthMonth = int.Parse(Console.ReadLine());
-        while (birthMonth < 1 || birthMonth > 12)
-        {
-            Console.WriteLine("Gimimo mėnuo turi būti nuo 1 iki 12. Pakartokite įvedimą:");
-            birthMonth = int.Parse(Console.ReadLine());
+            throw new Exception("File of data is empty");
         }
 
-        Console.Write("Gimimo diena: ");
-        int birthDay = int.Parse(Console.ReadLine());
-        while (birthDay < 1 || birthDay > DaysInMonth(birthYear, birthMonth))
+        var invalidRecords = new List<Person>();
+
+        using (StreamWriter file = new StreamWriter(resultPath, true))
         {
-            Console.WriteLine($"Neteisinga diena pasirinktam mėnesiui. Įveskite dar kartą (1-{DaysInMonth(birthYear, birthMonth)}):");
-            birthDay = int.Parse(Console.ReadLine());
+            file.WriteLine("Start processing\n");
+
+            foreach (var record in records)
+            {
+                DateTime.TryParse(record.DateofBirth, out var dateofBirth);
+
+                if(dateofBirth == DateTime.MinValue)
+                {
+                    invalidRecords.Add(record);
+                    continue;
+                }
+
+                if (dateofBirth.Year < MinBirthYear || dateofBirth.Year > MaxBirthYear)
+                {
+                    invalidRecords.Add(record);
+                    continue;
+                }
+                
+                var genderDigit = CalculateGenderDigit(record.Gender, dateofBirth.Year);
+                
+                string personalCode = GenerateLithuanianPersonalCode(genderDigit, dateofBirth.Year, dateofBirth.Month, dateofBirth.Day);
+
+                file.WriteLine($"Sugeneruotas asmens kodas of {record.FirstName}: {personalCode}");
+            }
+
+            file.WriteLine("Invalid records:\n");
+            foreach (var invalidRecord in invalidRecords)
+            {
+                file.WriteLine(JsonConvert.SerializeObject(invalidRecord));
+            }
+
+            file.WriteLine("\nEnd processing\n");
         }
-
-        string personalCode = GenerateLithuanianPersonalCode(genderDigit, birthYear, birthMonth, birthDay);
-
-        Console.WriteLine($"Sugeneruotas asmens kodas: {personalCode}");
     }
 
     static string GenerateLithuanianPersonalCode(int genderDigit, int birthYear, int birthMonth, int birthDay)
@@ -76,8 +65,8 @@ class Program
         string sixthAndSeventhDigits = $"{birthDay:D2}";
 
         Random random = new Random();
-        int randomDigits = random.Next(1000); 
-        string randomDigitsString = $"{randomDigits:D3}"; 
+        int randomDigits = random.Next(1000);
+        string randomDigitsString = $"{randomDigits:D3}";
 
         int tenthDigit = CalculateControlDigit($"{firstDigit}{secondAndThirdDigits:D2}{fourthAndFifthDigits:D2}{sixthAndSeventhDigits}{randomDigitsString}");
 
@@ -101,5 +90,47 @@ class Program
     static int DaysInMonth(int year, int month)
     {
         return DateTime.DaysInMonth(year, month);
+    }
+
+    static List<Person> ReadFile(string path)
+    {
+        if (!File.Exists(path))
+        {
+            throw new Exception("File of data is not exist");
+        }
+
+        using (StreamReader r = new(path))
+        {
+            string json = r.ReadToEnd();
+            try
+            {
+                var records = JsonConvert.DeserializeObject<List<Person>>(json);
+                return records;
+            }
+            catch (Exception)
+            {
+                throw;
+            }                        
+        }
+    }
+
+    static int CalculateGenderDigit(char gender, int currentYear)
+    {
+        int genderDigit = 0;
+
+        if (currentYear >= 1800 && currentYear <= 1900)
+        {
+            genderDigit = (gender == 'V') ? 1 : 2;
+        }
+        else if (currentYear >= 1901 && currentYear <= 2000)
+        {
+            genderDigit = (gender == 'V') ? 3 : 4;
+        }
+        else if (currentYear >= 2001 && currentYear <= 2023)
+        {
+            genderDigit = (gender == 'V') ? 5 : 6;
+        }
+
+        return genderDigit;
     }
 }

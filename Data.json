@@ -1,0 +1,32 @@
+﻿[
+    {
+        "FirstName": "Isabelle",
+        "LastName": "Dominguez",
+        "Gender": "f",
+        "DateofBirth": "2022-08-12"
+    },
+    {
+        "FirstName": "Ellis",
+        "LastName": "Deleon",
+        "Gender": "m",
+        "DateofBirth": "2017-05-01"
+    },
+    {
+        "FirstName": "Carrillo",
+        "LastName": "Summers",
+        "Gender": "m",
+        "DateofBirth": "2022-09-29"
+    },
+    {
+        "FirstName": "Leola",
+        "LastName": "Berger",
+        "Gender": "f",
+        "DateofBirth": "2016-03-04"
+    },
+    {
+        "FirstName": "Mosley",
+        "LastName": "Brooks",
+        "Gender": "m",
+        "DateofBirth": "2016-08-29"
+    }
+]
