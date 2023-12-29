@@ -1,0 +1,14 @@
+C:\Users\зс\Desktop\C#\pr\bin\Debug\net7.0\pr.exe
+C:\Users\зс\Desktop\C#\pr\bin\Debug\net7.0\pr.deps.json
+C:\Users\зс\Desktop\C#\pr\bin\Debug\net7.0\pr.runtimeconfig.json
+C:\Users\зс\Desktop\C#\pr\bin\Debug\net7.0\pr.dll
+C:\Users\зс\Desktop\C#\pr\bin\Debug\net7.0\pr.pdb
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.AssemblyInfoInputs.cache
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.AssemblyInfo.cs
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.csproj.CoreCompileInputs.cache
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.dll
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\refint\pr.dll
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.pdb
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\pr.genruntimeconfig.cache
+C:\Users\зс\Desktop\C#\pr\obj\Debug\net7.0\ref\pr.dll
