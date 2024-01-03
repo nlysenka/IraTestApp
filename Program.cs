@@ -47,10 +47,13 @@ class Program
                 file.WriteLine($"Sugeneruotas asmens kodas of {record.FirstName}: {personalCode}");
             }
 
-            file.WriteLine("Invalid records:\n");
-            foreach (var invalidRecord in invalidRecords)
+            if (invalidRecords.Any())
             {
-                file.WriteLine(JsonConvert.SerializeObject(invalidRecord));
+                file.WriteLine("\nInvalid records:\n");
+                foreach (var invalidRecord in invalidRecords)
+                {
+                    file.WriteLine(JsonConvert.SerializeObject(invalidRecord));
+                }
             }
 
             file.WriteLine("\nEnd processing\n");
