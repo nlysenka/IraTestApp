@@ -8,8 +8,8 @@ class Program
 
     static void Main()
     {
-        var inputPath = Path.Combine("D:", "data.json");
-        var resultPath = Path.Combine("D:", "result.json");
+        var inputPath = Path.Combine(Environment.CurrentDirectory, "data.json");
+        var resultPath = Path.Combine(Environment.CurrentDirectory, "result.json");
 
         var records = ReadFile(inputPath);
         
@@ -85,11 +85,6 @@ class Program
         }
         int remainder = sum % 11;
         return (remainder == 10) ? 0 : remainder;
-    }
-
-    static int DaysInMonth(int year, int month)
-    {
-        return DateTime.DaysInMonth(year, month);
     }
 
     static List<Person> ReadFile(string path)
